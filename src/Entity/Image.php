@@ -16,7 +16,7 @@ class Image
     #[ORM\Column(type: 'string', length: 255)]
     private $url;
 
-    #[ORM\ManyToOne(targetEntity: Review::class, inversedBy: 'images')]
+    #[ORM\ManyToOne(targetEntity: Review::class, cascade: ['persist'], inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: false)]
     private $review;
 

@@ -34,7 +34,7 @@ class Review
     #[Assert\NotBlank]
     private int $rating;
 
-    #[ORM\OneToMany(mappedBy: 'review', targetEntity: Image::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'review', targetEntity: Image::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $images;
 
     public function __construct()

@@ -31,11 +31,18 @@ class ReviewsController extends AbstractController
     #[Route('/api/reviews', name: 'reviews.store', methods: 'POST')]
     public function store(Request $request): Response
     {
-        $review = Review::fromArray($request->query->all());
+        $review = Review::fromArray(\json_decode($request->getContent(), true));
         $errors = $this->validator->validate($review);
 
         if (count($errors) > 0) {
-            return new Response($errors, 400);
+
+            $errorsArr = [];
+
+            foreach ($errors as $violation) {
+                $errorsArr[$violation->getPropertyPath()] = $violation->getMessage();
+            }
+
+            return $this->json($errorsArr, 400);
         }
 
         $this->reviewRepository->save($review);
