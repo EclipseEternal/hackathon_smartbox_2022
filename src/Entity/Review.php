@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReviewRepository;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,7 +29,7 @@ class Review
 
     #[ORM\Column(type: 'date')]
     #[Assert\NotBlank]
-    private \DateTimeInterface $date;
+    private DateTimeInterface $date;
 
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank]
@@ -71,12 +72,12 @@ class Review
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(DateTimeInterface $date): self
     {
         $this->date = $date;
 
@@ -103,9 +104,9 @@ class Review
             'comment' => $this->getComment(),
             'date' => $this->getDate()->format('Y-m-d'),
             'rating' => $this->getRating(),
-            'images' => $this->images->map(static function(Image $image) {
+            'images' => $this->getImages()->map(static function(Image $image) {
                 return $image->toArray();
-            })
+            })->toArray(),
         ];
     }
 

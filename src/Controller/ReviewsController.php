@@ -22,16 +22,17 @@ class ReviewsController extends AbstractController
     #[Route('/api/reviews', name: 'reviews.list', methods: 'GET')]
     public function list(): Response
     {
-        return $this->json([
-            'message' => 'GET Method',
-            'path' => 'src/Controller/ReviewsController.php',
-        ]);
+        $list = $this->reviewRepository->findAll();
+
+        return $this->json(array_map(static function(Review $review): array {
+            return $review->toArray();
+        }, $list));
     }
 
     #[Route('/api/reviews', name: 'reviews.store', methods: 'POST')]
     public function store(Request $request): Response
     {
-        $review = Review::fromArray(\json_decode($request->getContent(), true));
+        $review = Review::fromArray(json_decode($request->getContent(), true));
         $errors = $this->validator->validate($review);
 
         if (count($errors) > 0) {
