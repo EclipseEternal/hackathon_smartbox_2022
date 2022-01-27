@@ -11,19 +11,19 @@ class Review
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 100)]
-    private $email;
+    private string $email;
 
     #[ORM\Column(type: 'text')]
-    private $comment;
+    private string $comment;
 
     #[ORM\Column(type: 'date')]
-    private $date;
+    private \DateTimeInterface $date;
 
     #[ORM\Column(type: 'integer')]
-    private $rating;
+    private int $rating;
 
     public function getId(): ?int
     {
