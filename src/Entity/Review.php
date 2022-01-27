@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ReviewRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -100,9 +101,27 @@ class Review
             'id' => $this->getId(),
             'email' => $this->getEmail(),
             'comment' => $this->getComment(),
-            'date' => $this->getRating(),
-            'rating' => $this->getRating()
+            'date' => $this->getDate()->format('Y-m-d'),
+            'rating' => $this->getRating(),
+            'images' => $this->images->map(static function(Image $image) {
+                return $image->toArray();
+            })
         ];
+    }
+
+    public static function fromArray(array $data): Review
+    {
+        $review = new Review();
+        $review->setComment($data['comment'] ?? null);
+        $review->setEmail($data['email'] ?? null);
+        $review->setDate(new DateTime());
+        $review->setRating($data['rating'] ?? null);
+
+        foreach ($data['images'] ?? [] as $imageData) {
+            $review->addImage(Image::fromArray($imageData));
+        }
+
+        return $review;
     }
 
     /**

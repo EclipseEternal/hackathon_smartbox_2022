@@ -48,4 +48,19 @@ class Image
 
         return $this;
     }
+
+    public static function fromArray(array $data): Image
+    {
+        $image = new Image();
+        $image->setUrl($data['url'] ?? null);
+
+        return $image;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'url' => $this->url,
+        ];
+    }
 }
