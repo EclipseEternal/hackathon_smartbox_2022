@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReviewRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
 class Review
@@ -14,15 +15,20 @@ class Review
     private int $id;
 
     #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private string $email;
 
     #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
     private string $comment;
 
     #[ORM\Column(type: 'date')]
+    #[Assert\NotBlank]
     private \DateTimeInterface $date;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank]
     private int $rating;
 
     public function getId(): ?int
