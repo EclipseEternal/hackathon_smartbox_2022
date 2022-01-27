@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ReviewRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,6 +32,14 @@ class Review
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank]
     private int $rating;
+
+    #[ORM\OneToMany(mappedBy: 'review', targetEntity: Image::class, orphanRemoval: true)]
+    private Collection $images;
+
+    public function __construct()
+    {
+        $this->images = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -80,6 +90,47 @@ class Review
     public function setRating(int $rating): self
     {
         $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'comment' => $this->getComment(),
+            'date' => $this->getRating(),
+            'rating' => $this->getRating()
+        ];
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setReview($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getReview() === $this) {
+                $image->setReview(null);
+            }
+        }
 
         return $this;
     }
