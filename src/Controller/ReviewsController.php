@@ -22,7 +22,7 @@ class ReviewsController extends AbstractController
     #[Route('/api/reviews', name: 'reviews.list', methods: 'GET')]
     public function list(): Response
     {
-        $list = $this->reviewRepository->findAll();
+        $list = $this->reviewRepository->findBy([], ['id' => 'DESC']);
 
         return $this->json(array_map(static function(Review $review): array {
             return $review->toArray();
